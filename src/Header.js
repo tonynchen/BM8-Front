@@ -4,14 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedPost: {
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(0),
     backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',

@@ -1,12 +1,10 @@
 import React from 'react';
 import './App.css';
 import Header from './Header';
-import AppBar from '@material-ui/core/AppBar';
+import LocationForm from './LocationForm';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -62,13 +60,33 @@ const useStyles = makeStyles((theme) => ({
   locationCardDetails: {
     flex: 1,
   },
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+  },
+  stepper: {
+    padding: theme.spacing(3, 0, 5),
+  },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+  },
 }));
-
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-    // return <AddressForm />;
+      return (<LocationForm></LocationForm>);
     case 1:
     // return <PaymentForm />;
     case 2:
@@ -91,7 +109,7 @@ export default function App() {
     <MuiThemeProvider theme={theme}>
       <React.Fragment>
         <CssBaseline />
-        <AppBar position='static' color='default' elevation={0} className={classes.appBar}>
+        {/* <AppBar position='static' color='default' elevation={0} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             <Typography variant='h6' color='inherit' noWrap className={classes.toolbarTitle}>
               C-City
@@ -102,18 +120,16 @@ export default function App() {
               </Link>
             </nav>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
+        <Header />
         <Container maxWidth='lg' style={{ marginTop: '3rem' }}>
-          <main>
-            <Header />
-          </main>
           {/* Stepper */}
           <main className={classes.layout}>
             <Paper className={classes.paper}>
-              <Typography component='h1' variant='h4' align='center'>
+              <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem' }}>
                 Checkout
               </Typography>
-              <Stepper activeStep={activeStep} className={classes.stepper}>
+              <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel>
                 {steps.map((label) => (
                   <Step key={label}>
                     <StepLabel>{label}</StepLabel>
