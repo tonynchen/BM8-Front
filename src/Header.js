@@ -40,7 +40,7 @@ export default function MainFeaturedPost(props) {
     title: 'C-City',
     description:
       "Don't know where you want to move? We are here to help.",
-    image: 'https://source.unsplash.com/random',
+    image: 'https://source.unsplash.com/featured/?city,urban',
     imgText: 'main image description',
   };
 
