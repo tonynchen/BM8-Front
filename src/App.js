@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './Header';
 import LocationForm from './LocationForm';
+import PreferenceForm from './PreferenceForm';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -142,7 +143,7 @@ export default function App() {
       case 0:
         return <LocationForm setLocation={setLocation}></LocationForm>;
       case 1:
-      // return <PaymentForm />;
+        return <PreferenceForm></PreferenceForm>;
       case 2:
       // return <Review />;
       default:
