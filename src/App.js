@@ -16,6 +16,8 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from './Alert.js';
 import axios from 'axios';
+import Widget from "./components/Widget";
+import s from "./Dashboard.module.scss";
 // import AddressForm from './AddressForm';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
@@ -164,7 +166,13 @@ export default function App() {
         <Container maxWidth='lg' style={{ marginTop: '3rem' }}>
           {/* Stepper */}
           <main className={classes.layout}>
-            <Paper className={classes.paper}>
+            {/* <Paper className={classes.paper}> */}
+            <Widget
+              title={
+                <h5>
+                  Headings <small className='text-muted'>Default and customized</small>
+                </h5>
+              }>
               <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem' }}>
                 Find Your Next Dream Location
               </Typography>
@@ -199,7 +207,8 @@ export default function App() {
                   </React.Fragment>
                 )}
               </React.Fragment>
-            </Paper>
+              {/* </Paper> */}
+            </Widget>
           </main>
         </Container>
       </React.Fragment>
