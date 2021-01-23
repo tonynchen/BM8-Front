@@ -48,21 +48,30 @@ export default function InputAdornments(props) {
 
   const handleClickLocation = () => {
     if (location.length > 0) {
-      axios
-        .get(
-          "https://api.radar.io/v1/geocode/forward",
-          { params: { query: location } },
-          {
-            headers: {
-              Authorization: `prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4`,
-            },
-          }
-        )
+      var config = {
+        method: 'get',
+        url: 'https://api.radar.io/v1/geocode/forward',
+        headers: {
+          Authorization: 'prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4',
+        },
+        params: { query: location },
+      };
+      axios(config)
         .then(function (res) {
-          console.log(res.data);
+          var data = res.data.addresses[0];
+          if (data.countryCode !== 'US') {
+            setAlertMessage('We currently only support US!');
+            setAlertSeverity('error');
+            setAlertOpen(true);
+            return;
+          }
+          // TODO: send to backend
+        })
+        .catch(function (error) {
+          console.log(error);
         });
     } else {
-      console.log("here");
+      console.log('here');
       if (navigator.geolocation) {
         setOpen(true);
         setTimeout(function () {
@@ -89,6 +98,12 @@ export default function InputAdornments(props) {
                 console.log(data);
                 setLocation(data.city + ', ' + data.stateCode);
                 setOpen(false);
+                if (data.countryCode !== 'US') {
+                  setAlertMessage('We currently only support US!');
+                  setAlertSeverity('error');
+                  setAlertOpen(true);
+                  return;
+                }
               });
           },
           function () {
@@ -97,7 +112,7 @@ export default function InputAdornments(props) {
         );
       } else {
         console.log('Geolocation not available.');
-        setAlertMessage('You are not logged in!');
+        setAlertMessage('Geolocation is not available, try manual typing.');
         setAlertSeverity('error');
         setAlertOpen(true);
       }
