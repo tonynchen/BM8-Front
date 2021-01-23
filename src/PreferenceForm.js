@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import RubberSlider from "@shwilliam/react-rubber-slider";
-import "@shwilliam/react-rubber-slider/dist/styles.css";
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +26,8 @@ export default function InputAdornments() {
 
   return (
     <Grid container justify='center'>
-      <Grid item md={8}>
+      <Grid item md={6} xs={12}>
+
       </Grid>
     </Grid>
   );
