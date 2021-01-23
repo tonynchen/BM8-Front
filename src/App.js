@@ -100,7 +100,12 @@ export default function App() {
 
   const handleNext = async () => {
     if (activeStep == 0) {
-      console.log(location);
+      console.log(location)
+      if (location == "") {
+        setAlertMessage('We need your location information to proceed');
+        setAlertSeverity('error');
+        setAlertOpen(true);
+      }
       if (await validateLocation(location)) {
         setActiveStep(activeStep + 1);
       }
