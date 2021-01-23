@@ -29,13 +29,6 @@ export default function InputAdornments() {
   return (
     <Grid container justify='center'>
       <Grid item md={8}>
-      <RubberSlider
-        width={250}
-        value={value}
-        onChange={setValue}
-        min={1}
-        max={100}
-      />
       </Grid>
     </Grid>
   );
