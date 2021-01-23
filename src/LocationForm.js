@@ -77,7 +77,6 @@ export default function InputAdornments(props) {
               },
             })
             .then(function (res) {
-              // TODO: send to backend
               var data = res.data.addresses[0];
               console.log(data);
               setLocation(data.city + ', ' + data.stateCode);
@@ -88,14 +87,6 @@ export default function InputAdornments(props) {
                 setAlertSeverity('error');
                 setAlertOpen(true);
                 return;
-              } else {
-                setFinalCityData({
-                  latitude: data.latitude,
-                  longitude: data.longitude,
-                  size: 10,
-                  tooltip: data.city + ', ' + data.stateCode,
-                });
-                setCitySet(true);
               }
             });
         },
