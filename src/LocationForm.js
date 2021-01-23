@@ -35,87 +35,79 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InputAdornments(props) {
   const classes = useStyles();
-  console.log(props);
   const [location, setLocation] = React.useState('');
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState('');
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [open, setOpen] = React.useState(false);
 
+  const [finalCityData, setFinalCityData] = React.useState();
+  const [citySet, setCitySet] = React.useState(false);
+
   const handleChange = (e) => {
     setLocation(e.target.value);
+    props.setLocation(e.target.value);
   };
 
+  console.log(props);
+
   const handleClickLocation = () => {
-    if (location.length > 0) {
-      var config = {
-        method: 'get',
-        url: 'https://api.radar.io/v1/geocode/forward',
-        headers: {
-          Authorization: 'prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4',
-        },
-        params: { query: location },
-      };
-      axios(config)
-        .then(function (res) {
-          var data = res.data.addresses[0];
-          if (data.countryCode !== 'US') {
-            setAlertMessage('We currently only support US!');
-            setAlertSeverity('error');
-            setAlertOpen(true);
-            return;
-          }
-          // TODO: send to backend
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      console.log('here');
-      if (navigator.geolocation) {
-        setOpen(true);
-        setTimeout(function () {
+    if (navigator.geolocation) {
+      setOpen(true);
+      setTimeout(function () {
+        if (open) {
           setOpen(false);
           setAlertMessage('Can not get your location, try entering manually as City, State');
           setAlertSeverity('error');
           setAlertOpen(true);
-        }, 10000);
-        navigator.geolocation.getCurrentPosition(
-          function (position) {
-            let lat = parseFloat(position.coords.latitude);
-            let long = parseFloat(position.coords.longitude);
-            console.log('Latitude is :', position.coords.latitude);
-            console.log('Longitude is :', position.coords.longitude);
-            axios
-              .get(`https://api.radar.io/v1/geocode/reverse?coordinates=${lat},${long}`, {
-                headers: {
-                  Authorization: `prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4`,
-                },
-              })
-              .then(function (res) {
-                // TODO: send to backend
-                var data = res.data.addresses[0];
-                console.log(data);
-                setLocation(data.city + ', ' + data.stateCode);
-                setOpen(false);
-                if (data.countryCode !== 'US') {
-                  setAlertMessage('We currently only support US!');
-                  setAlertSeverity('error');
-                  setAlertOpen(true);
-                  return;
-                }
-              });
-          },
-          function () {
-            console.log('error in locating');
-          }
-        );
-      } else {
-        console.log('Geolocation not available.');
-        setAlertMessage('Geolocation is not available, try manual typing.');
-        setAlertSeverity('error');
-        setAlertOpen(true);
-      }
+        } else {
+          return;
+        }
+      }, 10000);
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          let lat = parseFloat(position.coords.latitude);
+          let long = parseFloat(position.coords.longitude);
+          console.log('Latitude is :', position.coords.latitude);
+          console.log('Longitude is :', position.coords.longitude);
+          axios
+            .get(`https://api.radar.io/v1/geocode/reverse?coordinates=${lat},${long}`, {
+              headers: {
+                Authorization: `prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4`,
+              },
+            })
+            .then(function (res) {
+              // TODO: send to backend
+              var data = res.data.addresses[0];
+              console.log(data);
+              setLocation(data.city + ', ' + data.stateCode);
+              props.setLocation(data.city + ', ' + data.stateCode);
+              setOpen(false);
+              if (data.countryCode !== 'US') {
+                setAlertMessage('We currently only support US!');
+                setAlertSeverity('error');
+                setAlertOpen(true);
+                return;
+              } else {
+                setFinalCityData({
+                  latitude: data.latitude,
+                  longitude: data.longitude,
+                  size: 10,
+                  tooltip: data.city + ', ' + data.stateCode,
+                });
+                setCitySet(true);
+              }
+            });
+        },
+        function () {
+          console.log('error in locating');
+        }
+      );
+    } else {
+      console.log('Geolocation not available.');
+      setAlertMessage('Geolocation is not available, try manual typing.');
+      setAlertSeverity('error');
+      setAlertOpen(true);
     }
   };
 
@@ -158,16 +150,6 @@ export default function InputAdornments(props) {
               />
             </FormControl>
           </div>
-          <Map
-            cities={[
-              {
-                latitude: 40.717079,
-                longitude: -74.00116,
-                size: 6,
-                tooltip: 'New York',
-                fill: '#F00',
-              },
-            ]}></Map>
         </Grid>
       </Grid>
     </>

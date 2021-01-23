@@ -12,6 +12,9 @@ import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from './Alert.js';
+import axios from 'axios';
 // import AddressForm from './AddressForm';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
@@ -83,51 +86,86 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return (<LocationForm></LocationForm>);
-    case 1:
-    // return <PaymentForm />;
-    case 2:
-    // return <Review />;
-    default:
-    // throw new Error('Unknown step');
-  }
-}
-
 export default function App() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [location, setLocation] = React.useState('');
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState('');
+  const [alertSeverity, setAlertSeverity] = React.useState('error');
   const steps = ['Your current location', 'Preference', 'Result'];
 
-  const handleNext = () => setActiveStep(activeStep + 1);
+  const handleNext = async () => {
+    if (activeStep == 0) {
+      console.log(location);
+      if (await validateLocation(location)) {
+        setActiveStep(activeStep + 1);
+      }
+    } else {
+      setActiveStep(activeStep + 1);
+    }
+  };
 
-  const handleBack = () => setActiveStep(activeStep - 1);
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setAlertOpen(false);
+  };
+
+  const validateLocation = async (location) => {
+    var config = {
+      method: 'get',
+      url: 'https://api.radar.io/v1/geocode/forward',
+      headers: {
+        Authorization: 'prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4',
+      },
+      params: { query: location },
+    };
+    var res = await axios(config);
+    var data = res.data.addresses[0];
+    if (data.countryCode !== 'US') {
+      setAlertMessage('We currently only support US!');
+      setAlertSeverity('error');
+      setAlertOpen(true);
+      return false;
+    } else {
+      return true;
+    }
+    // TODO: send to backend
+  };
+
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return <LocationForm setLocation={setLocation}></LocationForm>;
+      case 1:
+      // return <PaymentForm />;
+      case 2:
+      // return <Review />;
+      default:
+      // throw new Error('Unknown step');
+    }
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
+      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Alert onClose={handleAlertClose} severity={alertSeverity}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <React.Fragment>
         <CssBaseline />
-        {/* <AppBar position='static' color='default' elevation={0} className={classes.appBar}>
-          <Toolbar className={classes.toolbar}>
-            <Typography variant='h6' color='inherit' noWrap className={classes.toolbarTitle}>
-              C-City
-            </Typography>
-            <nav>
-              <Link variant='button' color='textPrimary' href='#' className={classes.link}>
-                About
-              </Link>
-            </nav>
-          </Toolbar>
-        </AppBar> */}
         <Header />
         <Container maxWidth='lg' style={{ marginTop: '3rem' }}>
           {/* Stepper */}
           <main className={classes.layout}>
             <Paper className={classes.paper}>
               <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem' }}>
-                Checkout
+                Find Your Next Dream Location
               </Typography>
               <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel>
                 {steps.map((label) => (

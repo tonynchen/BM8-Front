@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4maps from "@amcharts/amcharts4/maps";
-import am4geodata_usaHigh from "@amcharts/amcharts4-geodata/usaHigh";
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4maps from '@amcharts/amcharts4/maps';
+import am4geodata_usaHigh from '@amcharts/amcharts4-geodata/usaHigh';
 
 import AnimateNumber from 'react-animated-number';
 import s from './am4chartMap.module.scss';
-  
-  class Am4chartMap extends Component {
-  
+
+class Am4chartMap extends Component {
+
   componentDidMount() {
     console.log(this.props);
-    let map = am4core.create("map", am4maps.MapChart);
+    let map = am4core.create('map', am4maps.MapChart);
     map.geodata = am4geodata_usaHigh;
     map.percentHeight = 90;
     map.dy = 10;
@@ -45,22 +45,22 @@ import s from './am4chartMap.module.scss';
     // let minusButtonHoverState = map.zoomControl.minusButton.background.states.create("hover");
     // minusButtonHoverState.properties.fill = am4core.color("#354D84");
     let polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#474D84");
-    polygonTemplate.stroke = am4core.color("#6979C9")
-    let hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#354D84");
+    polygonTemplate.tooltipText = '{name}';
+    polygonTemplate.fill = am4core.color('#474D84');
+    polygonTemplate.stroke = am4core.color('#6979C9');
+    let hs = polygonTemplate.states.create('hover');
+    hs.properties.fill = am4core.color('#354D84');
     let citySeries = map.series.push(new am4maps.MapImageSeries());
     citySeries.data = this.props.cities;
-    citySeries.dataFields.value = "size";
+    citySeries.dataFields.value = 'size';
     let city = citySeries.mapImages.template;
     city.nonScaling = true;
-    city.propertyFields.latitude = "latitude";
-    city.propertyFields.longitude = "longitude";
+    city.propertyFields.latitude = 'latitude';
+    city.propertyFields.longitude = 'longitude';
     let circle = city.createChild(am4core.Circle);
-    circle.fill = am4core.color("#C7D0FF");
+    circle.fill = am4core.color('#C7D0FF');
     circle.strokeWidth = 0;
-    let circleHoverState = circle.states.create("hover");
+    let circleHoverState = circle.states.create('hover');
     circleHoverState.properties.strokeWidth = 1;
     circle.tooltipText = '{tooltip}';
     circle.propertyFields.radius = 'size';
@@ -68,7 +68,7 @@ import s from './am4chartMap.module.scss';
   }
 
   componentWillUnmount() {
-    if(this.map) {
+    if (this.map) {
       this.map.dispose();
     }
   }
@@ -76,9 +76,8 @@ import s from './am4chartMap.module.scss';
   render() {
     return (
       <div className={s.mapChart}>
-        <div className={s.stats}>
-        </div>
-        <div className={s.map} id="map">
+        <div className={s.stats}></div>
+        <div className={s.map} id='map'>
           <span>Alternative content for the map</span>
         </div>
       </div>
