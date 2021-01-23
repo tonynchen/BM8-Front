@@ -1,23 +1,27 @@
 import React from 'react';
 import './App.css';
 import Header from './Header';
+import PropTypes from 'prop-types';
 import LocationForm from './LocationForm';
 import PreferenceForm from './PreferenceForm';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import StepConnector from '@material-ui/core/StepConnector';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
+import Check from '@material-ui/icons/Check';
+import clsx from 'clsx';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from './Alert.js';
 import axios from 'axios';
-import Widget from "./components/Widget";
-import s from "./Dashboard.module.scss";
+import Widget from './components/Widget';
+import s from './Dashboard.module.scss';
 // import AddressForm from './AddressForm';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
@@ -26,7 +30,104 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: "'Montserrat', sans-serif",
   },
+  stepper: {
+    opacity: 0,
+  },
+  overrides: {
+    MuiPaper: {
+      root: {
+        color: 'rgba(255, 0, 0, 0)',
+      },
+    },
+    MuiStepConnector: {
+      line: {
+        color: 'rgba(255,255,255, 0.9)',
+      },
+      root: {
+        color: 'rgba(255,255,255, 0.9)',
+      },
+      horizontal: {
+        color: 'rgba(255,255,255, 0.9)',
+      },
+      alternativeLabel: {
+        color: 'rgba(255,255,255, 0.9)',
+        backgroundColor: 'rgba(255,255,255, 0.9)',
+      }
+    }
+  },
 });
+
+const useQontoStepIconStyles = makeStyles({
+  root: {
+    color: '#eaeaf0',
+    display: 'flex',
+    height: 22,
+    alignItems: 'center',
+  },
+  active: {
+    color: '#784af4',
+  },
+  circle: {
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    backgroundColor: 'currentColor',
+  },
+  completed: {
+    color: '#784af4',
+    zIndex: 1,
+    fontSize: 18,
+  },
+});
+
+function QontoStepIcon(props) {
+  const classes = useQontoStepIconStyles();
+  const { active, completed } = props;
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+      })}
+    >
+      {completed ? <Check className={classes.completed} /> : <div className={classes.circle} />}
+    </div>
+  );
+}
+
+const QontoConnector = withStyles({
+  alternativeLabel: {
+    top: 10,
+    left: 'calc(-50% + 16px)',
+    right: 'calc(50% + 16px)',
+  },
+  active: {
+    '& $line': {
+      borderColor: '#784af4',
+    },
+  },
+  completed: {
+    '& $line': {
+      borderColor: '#784af4',
+    },
+  },
+  line: {
+    borderColor: '#eaeaf0',
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+})(StepConnector);
+
+QontoStepIcon.propTypes = {
+  /**
+   * Whether this step is active.
+   */
+  active: PropTypes.bool,
+  /**
+   * Mark the step as completed. Is passed to child components.
+   */
+  completed: PropTypes.bool,
+};
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -77,7 +178,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   stepper: {
-    padding: theme.spacing(3, 0, 5),
+    // padding: theme.spacing(3, 0, 5),
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+  },
+  stepperWid: {
+    margin: '1rem',
+    marginLeft: '2rem',
+    marginRight: '2rem',
   },
   buttons: {
     display: 'flex',
@@ -100,8 +207,8 @@ export default function App() {
 
   const handleNext = async () => {
     if (activeStep == 0) {
-      console.log(location)
-      if (location == "") {
+      console.log(location);
+      if (location == '') {
         setAlertMessage('We need your location information to proceed');
         setAlertSeverity('error');
         setAlertOpen(true);
@@ -172,19 +279,14 @@ export default function App() {
           {/* Stepper */}
           <main className={classes.layout}>
             {/* <Paper className={classes.paper}> */}
-            <Widget
-              title={
-                <h5>
-                  Headings <small className='text-muted'>Default and customized</small>
-                </h5>
-              }>
-              <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem' }}>
+            <Widget>
+              <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem', color: 'rgba(244, 244, 245, 0.9)' }}>
                 Find Your Next Dream Location
               </Typography>
-              <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel>
+              <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel connector={<QontoConnector />}>
                 {steps.map((label) => (
                   <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
+                    <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
                   </Step>
                 ))}
               </Stepper>
