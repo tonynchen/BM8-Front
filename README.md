@@ -6,7 +6,6 @@ https://youtu.be/Rjs7ti70T0A
 
 ## Links
 https://coc-city-front.herokuapp.com
-https://coc-city-back.herokuapp.com
 
 ## What it does
 We designed an application that recommends 10 places/cities given user preferences.
