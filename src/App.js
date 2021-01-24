@@ -28,10 +28,6 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import s from './Dashboard.module.scss';
 
-// import AddressForm from './AddressForm';
-// import PaymentForm from './PaymentForm';
-// import Review from './Review';
-
 import { Helmet } from 'react-helmet';
 
 const theme = createMuiTheme({
@@ -325,6 +321,7 @@ export default function App() {
           };
           var res = await axios(config);
           var desc = res.data.addresses[0].formattedAddress + '\n';
+          desc = desc.concat('Rank: ' + i + '\n');
 
           for (const [key, value] of Object.entries(apiRes)) {
             if (key === 'states' || key === 'states_abbrev' || key === 'cities') continue;

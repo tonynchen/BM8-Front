@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
     marginBottom: theme.spacing(0),
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundImage: 'url(https://giphy.com/embed/hf6tYzbprOaNOwo0Ff)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -40,13 +39,12 @@ export default function MainFeaturedPost(props) {
   const post = {
     title: 'C-City',
     description: "Don't know where you want to move? We are here to help.",
-    // image: 'https://source.unsplash.com/featured/?city,urban',
     image: 'https://media.giphy.com/media/PkLrYFJT9KVwkkvpjO/giphy.gif',
     imgText: 'main image description',
   };
 
   return (
-    <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})`, backgroundPosition: '0px -310px' }}>
+    <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})`, backgroundPosition: '0px -475px' }}>
       {/* Increase the priority of the hero background image */}
       {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
       <div className={classes.overlay} />
