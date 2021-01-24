@@ -333,7 +333,7 @@ export default function App() {
     <MuiThemeProvider theme={theme}>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Cocity</title>
+        <title>C-City</title>
       </Helmet>
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={handleAlertClose} severity={alertSeverity}>

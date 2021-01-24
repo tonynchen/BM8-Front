@@ -40,23 +40,24 @@ export default function MainFeaturedPost(props) {
   const post = {
     title: 'C-City',
     description: "Don't know where you want to move? We are here to help.",
-    // image: 'https://source.unsplash.com/featured/?city,urban',
     image: 'https://media.giphy.com/media/PkLrYFJT9KVwkkvpjO/giphy.gif',
     imgText: 'main image description',
+    logo: 'img/city.png'
   };
 
   return (
     <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})`, backgroundPosition: '0px -310px' }}>
       {/* Increase the priority of the hero background image */}
       {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
+      <img src={post.logo} style={{position: 'absolute', marginBottom: '3%', width: '10%'}} alt={''} />
       <div className={classes.overlay} />
       <Grid container>
         <Grid item md={10}>
           <div className={classes.mainFeaturedPostContent}>
-            <Typography component='h1' variant='h3' color='inherit' gutterBottom>
+            <Typography component='h1' variant='h3' color='inherit' gutterBottom style={{marginLeft: '8%'}}>
               {post.title}
             </Typography>
-            <Typography variant='h5' color='inherit' paragraph>
+            <Typography variant='h5' color='inherit' paragraph style={{marginLeft: '8%'}}>
               {post.description}
             </Typography>
           </div>
