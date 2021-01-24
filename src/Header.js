@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
     marginBottom: theme.spacing(0),
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundImage: 'url(https://giphy.com/embed/hf6tYzbprOaNOwo0Ff)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -46,7 +45,7 @@ export default function MainFeaturedPost(props) {
   };
 
   return (
-    <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})`, backgroundPosition: '0px -310px' }}>
+    <Paper className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})`, backgroundPosition: '0px -475px' }}>
       {/* Increase the priority of the hero background image */}
       {<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
       <img src={post.logo} style={{position: 'absolute', marginBottom: '3%', width: '10%'}} alt={''} />
