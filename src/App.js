@@ -28,6 +28,8 @@ import s from './Dashboard.module.scss';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
 
+import {Helmet} from "react-helmet";
+
 const theme = createMuiTheme({
   typography: {
     fontFamily: "'Montserrat', sans-serif",
@@ -279,6 +281,10 @@ export default function App() {
 
   return (
     <MuiThemeProvider theme={theme}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Cocity</title>
+      </Helmet>
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={handleAlertClose} severity={alertSeverity}>
           {alertMessage}
