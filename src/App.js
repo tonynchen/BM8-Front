@@ -28,7 +28,7 @@ import s from './Dashboard.module.scss';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
 
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const theme = createMuiTheme({
   typography: {
@@ -69,6 +69,14 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiSlider: {
+      markLabel: {
+        color: 'rgba(255,255,255, 0.9)',
+      },
+      markLabelActive: {
+        color: 'rgba(255,255,255, 0.9)',
+      }
+    }
   },
 });
 
@@ -282,7 +290,7 @@ export default function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <Helmet>
-        <meta charSet="utf-8" />
+        <meta charSet='utf-8' />
         <title>Cocity</title>
       </Helmet>
       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
@@ -293,11 +301,11 @@ export default function App() {
       <React.Fragment>
         <CssBaseline />
         <Header />
-        <Container maxWidth='lg' style={{ marginTop: '3rem' }}>
+        <Container maxWidth='lg' style={{ marginTop: '3rem', marginBottom: '5rem' }}>
           {/* Stepper */}
           <main className={classes.layout}>
             {/* <Paper className={classes.paper}> */}
-            <Widget>
+            <Widget style={{ marginBottom: '3rem' }}>
               <Typography component='h1' variant='h4' align='center' style={{ marginTop: '1rem', color: 'rgba(244, 244, 245, 0.9)' }}>
                 Find Your Next Dream Location
               </Typography>
@@ -308,30 +316,30 @@ export default function App() {
                   </Step>
                 ))}
               </Stepper>
-              <React.Fragment>
-                {activeStep === steps.length ? (
-                  <React.Fragment>
-                    <Typography variant='h5' gutterBottom>
-                      Thank you!
-                    </Typography>
-                    <Typography variant='subtitle1'>We hope you liked your results!</Typography>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    {getStepContent(activeStep)}
-                    <div className={classes.buttons}>
-                      {activeStep !== 0 && (
-                        <Button onClick={handleBack} className={classes.button}>
-                          Back
+                <React.Fragment>
+                  {activeStep === steps.length ? (
+                    <React.Fragment>
+                      <Typography variant='h5' gutterBottom>
+                        Thank you!
+                      </Typography>
+                      <Typography variant='subtitle1'>We hope you liked your results!</Typography>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      {getStepContent(activeStep)}
+                      <div className={classes.buttons}>
+                        {activeStep !== 0 && (
+                          <Button onClick={handleBack} className={classes.button}>
+                            Back
+                          </Button>
+                        )}
+                        <Button variant='contained' color='primary' onClick={handleNext} className={classes.button}>
+                          {activeStep === steps.length - 1 ? 'Done' : 'Next'}
                         </Button>
-                      )}
-                      <Button variant='contained' color='primary' onClick={handleNext} className={classes.button}>
-                        {activeStep === steps.length - 1 ? 'Done' : 'Next'}
-                      </Button>
-                    </div>
-                  </React.Fragment>
-                )}
-              </React.Fragment>
+                      </div>
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
               {/* </Paper> */}
             </Widget>
           </main>
