@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
@@ -125,7 +126,7 @@ export default function InputAdornments(props) {
         <Grid item md={8}>
           <div className={classes.root}>
             <FormControl fullWidth className={clsx(classes.margin)}>
-              <InputLabel htmlFor='standard-adornment-password'>Enter city and state, or use current location</InputLabel>
+              <InputLabel htmlFor='standard-adornment-password' style={{color: 'white'}}>Enter city and state, or use current location</InputLabel>
               <Input
                 id='standard-adornment-password'
                 type='text'
@@ -133,7 +134,7 @@ export default function InputAdornments(props) {
                 onChange={handleChange}
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton aria-label='toggle password visibility' onClick={handleClickLocation} onMouseDown={handleMouseDownLocation}>
+                    <IconButton aria-label='toggle password visibility' onClick={handleClickLocation} onMouseDown={handleMouseDownLocation} style={{color: 'white'}}>
                       <LocationSearchingIcon></LocationSearchingIcon>
                     </IconButton>
                   </InputAdornment>
