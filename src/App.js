@@ -24,6 +24,8 @@ import axios from 'axios';
 import Widget from './components/Widget';
 import './styles/theme.scss';
 import mockData from './am4chartMap/mock';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import s from './Dashboard.module.scss';
 
 // import AddressForm from './AddressForm';
@@ -233,6 +235,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const unitDict = {
+  age: ' Year',
+  airport: ' Miles',
+  climate_high: '°F',
+  climate_low: '°F',
+  climate_precip: ' in',
+  cost: '',
+  crime: ' Violent Crime Per Capita',
+  disability: '',
+  education: ' Funding Per Capita',
+  employment: '%',
+  income: ' US Dollar',
+  income_tax_high: '%',
+  income_tax_low: '%',
+  transportation: ' Miles Per Year',
+  travel_time: ' Mins',
+};
+
+const translation = {
+  age: 'Age',
+  airport: 'Distance to Airport',
+  climate_high: 'Avg. High',
+  climate_low: 'Avg. Low',
+  climate_precip: 'Percipitation',
+  cost: 'Cost of Living Index',
+  crime: 'Crime',
+  disability: 'Disability Index',
+  education: 'Education',
+  employment: 'Unempoloyment Rate',
+  income: 'Household Income',
+  income_tax_high: 'Income Tax Max',
+  income_tax_low: 'Income Tax Min',
+  transportation: 'Public Transport',
+  travel_time: 'Commute Time',
+};
+
 export default function App() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -242,6 +280,7 @@ export default function App() {
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [preferenceData, setPreferenceData] = React.useState({});
   const [cities, setCities] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
   const steps = ['Your current location', 'Preference', 'Result'];
 
   const handleNext = async () => {
@@ -259,22 +298,56 @@ export default function App() {
     } else if (activeStep === 1) {
       console.log(preferenceData);
       // TODO: Send to backend
+      setOpen(true);
       var config = {
         method: 'post',
-        url: 'https://localhost:5000/get-city',
+        url: 'http://localhost:5000/get-city',
         data: preferenceData,
       };
       try {
         var res = await axios(config);
-        var data = res.data.addresses[0];
+        console.log(res.data);
+
+        var apiRes = res.data;
+
+        var states = apiRes.states_abbrev;
+        var cities = apiRes.cities;
+        var mapData = [];
+
+        for (var i = 0; i < states.length; i++) {
+          var config = {
+            method: 'get',
+            url: 'https://api.radar.io/v1/geocode/forward',
+            headers: {
+              Authorization: 'prj_live_pk_f205329de6eaf95633f3b87575b2ef9ddf0ac0a4',
+            },
+            params: { query: cities[i] + ', ' + states[i] },
+          };
+          var res = await axios(config);
+          var desc = res.data.addresses[0].formattedAddress + '\n';
+
+          for (const [key, value] of Object.entries(apiRes)) {
+            if (key === 'states' || key === 'states_abbrev' || key === 'cities') continue;
+            if (key === 'airport') desc = desc.concat(translation[key] + ': ' + parseFloat(value[i]).toFixed(2) + unitDict[key] + '\n');
+            else desc = desc.concat(translation[key] + ': ' + value[i] + unitDict[key] + '\n');
+          }
+
+          mapData.push({
+            latitude: res.data.addresses[0].latitude,
+            longitude: res.data.addresses[0].longitude,
+            size: 12 - i,
+            tooltip: desc,
+          });
+        }
 
         setActiveStep(activeStep + 1);
-        setCities(mockData);
+        setCities(mapData);
       } catch (Exception) {
         setActiveStep(activeStep + 1);
         setCities(mockData);
         console.log(cities);
       }
+      setOpen(false);
     } else {
       setActiveStep(activeStep + 1);
     }
@@ -286,7 +359,7 @@ export default function App() {
 
   const handleReset = () => {
     setActiveStep(0);
-  }
+  };
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') return;
@@ -312,7 +385,6 @@ export default function App() {
     } else {
       return true;
     }
-    // TODO: send to backend
   };
 
   const getStepContent = (step) => {
@@ -340,6 +412,9 @@ export default function App() {
           {alertMessage}
         </Alert>
       </Snackbar>
+      <Backdrop className={classes.backdrop} open={open}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
       <React.Fragment>
         <CssBaseline />
         <Header />
