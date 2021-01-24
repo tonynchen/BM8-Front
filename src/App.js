@@ -21,6 +21,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from './Alert.js';
 import axios from 'axios';
 import Widget from './components/Widget';
+import purple from '@material-ui/core/colors/purple';
 import './styles/theme.scss';
 import s from './Dashboard.module.scss';
 
@@ -31,6 +32,9 @@ import s from './Dashboard.module.scss';
 import { Helmet } from 'react-helmet';
 
 const theme = createMuiTheme({
+  palette: {
+    type: 'dark'
+  },
   typography: {
     fontFamily: "'Montserrat', sans-serif",
   },
@@ -76,6 +80,11 @@ const theme = createMuiTheme({
       markLabelActive: {
         color: 'rgba(255,255,255, 0.9)',
       }
+    },
+    MuiTextField: {
+      root: {
+        color: 'rgba(255,255,255, 0.9)',
+      },
     }
   },
 });
