@@ -3,6 +3,8 @@ As we are approaching Senior year of college, relocation is a topic that crosses
 
 ## Demo
 https://youtu.be/Rjs7ti70T0A
+https://coc-city-front.herokuapp.com
+https://coc-city-back.herokuapp.com
 
 ## What it does
 We designed an application that recommends 10 places/cities given user preferences.
