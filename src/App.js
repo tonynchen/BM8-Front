@@ -321,7 +321,7 @@ export default function App() {
           };
           var res = await axios(config);
           var desc = res.data.addresses[0].formattedAddress + '\n';
-          desc = desc.concat('Rank: ' + i + '\n');
+          desc = desc.concat('Rank: ' + (i + 1) + '\n');
 
           for (const [key, value] of Object.entries(apiRes)) {
             if (key === 'states' || key === 'states_abbrev' || key === 'cities') continue;
