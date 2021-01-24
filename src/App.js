@@ -260,9 +260,9 @@ export default function App() {
       console.log(preferenceData);
       // TODO: Send to backend
       var config = {
-        method: 'get',
+        method: 'post',
         url: 'https://localhost:5000/get-city',
-        params: { query: preferenceData },
+        data: preferenceData,
       };
       try {
         var res = await axios(config);
@@ -362,7 +362,7 @@ export default function App() {
                 {activeStep === steps.length ? (
                   <React.Fragment>
                     <Grid container justify='center'>
-                      <Grid item>
+                      <Grid item md={8}>
                         <Typography variant='h5' gutterBottom className={classes.centerText}>
                           Thank you!
                         </Typography>
