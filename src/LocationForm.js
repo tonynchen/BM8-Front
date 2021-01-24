@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
@@ -13,7 +12,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Alert from './Alert.js';
-import Map from './am4chartMap/am4chartMap';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,15 +40,10 @@ export default function InputAdornments(props) {
   const [alertSeverity, setAlertSeverity] = React.useState('error');
   const [open, setOpen] = React.useState(false);
 
-  const [finalCityData, setFinalCityData] = React.useState();
-  const [citySet, setCitySet] = React.useState(false);
-
   const handleChange = (e) => {
     setLocation(e.target.value);
     props.setLocation(e.target.value);
   };
-
-  console.log(props);
 
   const handleClickLocation = () => {
     if (navigator.geolocation) {

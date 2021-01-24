@@ -4,6 +4,7 @@ import Header from './Header';
 import PropTypes from 'prop-types';
 import LocationForm from './LocationForm';
 import PreferenceForm from './PreferenceForm';
+import ResultForm from './ResultForm';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -11,9 +12,9 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import StepConnector from '@material-ui/core/StepConnector';
-import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
 import Check from '@material-ui/icons/Check';
+import { Grid } from '@material-ui/core';
 import clsx from 'clsx';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -21,8 +22,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from './Alert.js';
 import axios from 'axios';
 import Widget from './components/Widget';
-import purple from '@material-ui/core/colors/purple';
 import './styles/theme.scss';
+import mockData from './am4chartMap/mock';
 import s from './Dashboard.module.scss';
 
 // import AddressForm from './AddressForm';
@@ -33,7 +34,7 @@ import { Helmet } from 'react-helmet';
 
 const theme = createMuiTheme({
   palette: {
-    type: 'dark'
+    type: 'dark',
   },
   typography: {
     fontFamily: "'Montserrat', sans-serif",
@@ -79,13 +80,13 @@ const theme = createMuiTheme({
       },
       markLabelActive: {
         color: 'rgba(255,255,255, 0.9)',
-      }
+      },
     },
     MuiTextField: {
       root: {
         color: 'rgba(255,255,255, 0.9)',
       },
-    }
+    },
   },
 });
 
@@ -97,7 +98,7 @@ const useQontoStepIconStyles = makeStyles({
     alignItems: 'center',
   },
   active: {
-    color: '#784af4',
+    color: '#db2a34',
   },
   circle: {
     width: 8,
@@ -106,7 +107,7 @@ const useQontoStepIconStyles = makeStyles({
     backgroundColor: 'currentColor',
   },
   completed: {
-    color: '#784af4',
+    color: '#db2a34',
     zIndex: 1,
     fontSize: 18,
   },
@@ -134,12 +135,12 @@ const QontoConnector = withStyles({
   },
   active: {
     '& $line': {
-      borderColor: '#784af4',
+      borderColor: '#db2a34',
     },
   },
   completed: {
     '& $line': {
-      borderColor: '#784af4',
+      borderColor: '#db2a34',
     },
   },
   line: {
@@ -225,6 +226,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  centerText: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
 export default function App() {
@@ -234,18 +240,40 @@ export default function App() {
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState('');
   const [alertSeverity, setAlertSeverity] = React.useState('error');
+  const [preferenceData, setPreferenceData] = React.useState({});
+  const [cities, setCities] = React.useState([]);
   const steps = ['Your current location', 'Preference', 'Result'];
 
   const handleNext = async () => {
-    if (activeStep == 0) {
+    if (activeStep === 0) {
       console.log(location);
-      if (location == '') {
+      if (location === '') {
         setAlertMessage('We need your location information to proceed');
         setAlertSeverity('error');
         setAlertOpen(true);
       }
       if (await validateLocation(location)) {
         setActiveStep(activeStep + 1);
+        setPreferenceData({});
+      }
+    } else if (activeStep === 1) {
+      console.log(preferenceData);
+      // TODO: Send to backend
+      var config = {
+        method: 'get',
+        url: 'https://localhost:5000/get-city',
+        params: { query: preferenceData },
+      };
+      try {
+        var res = await axios(config);
+        var data = res.data.addresses[0];
+
+        setActiveStep(activeStep + 1);
+        setCities(mockData);
+      } catch (Exception) {
+        setActiveStep(activeStep + 1);
+        setCities(mockData);
+        console.log(cities);
       }
     } else {
       setActiveStep(activeStep + 1);
@@ -255,6 +283,10 @@ export default function App() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  }
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') return;
@@ -288,11 +320,12 @@ export default function App() {
       case 0:
         return <LocationForm setLocation={setLocation}></LocationForm>;
       case 1:
-        return <PreferenceForm></PreferenceForm>;
+        return <PreferenceForm setPreferenceData={setPreferenceData}></PreferenceForm>;
       case 2:
-      // return <Review />;
+        return <ResultForm cities={cities} />;
       default:
-      // throw new Error('Unknown step');
+        // throw new Error('Unknown step');
+        break;
     }
   };
 
@@ -325,30 +358,41 @@ export default function App() {
                   </Step>
                 ))}
               </Stepper>
-                <React.Fragment>
-                  {activeStep === steps.length ? (
-                    <React.Fragment>
-                      <Typography variant='h5' gutterBottom>
-                        Thank you!
-                      </Typography>
-                      <Typography variant='subtitle1'>We hope you liked your results!</Typography>
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      {getStepContent(activeStep)}
-                      <div className={classes.buttons}>
-                        {activeStep !== 0 && (
-                          <Button onClick={handleBack} className={classes.button}>
-                            Back
-                          </Button>
-                        )}
-                        <Button variant='contained' color='primary' onClick={handleNext} className={classes.button}>
-                          {activeStep === steps.length - 1 ? 'Done' : 'Next'}
+              <React.Fragment>
+                {activeStep === steps.length ? (
+                  <React.Fragment>
+                    <Grid container justify='center'>
+                      <Grid item>
+                        <Typography variant='h5' gutterBottom className={classes.centerText}>
+                          Thank you!
+                        </Typography>
+                        <Typography variant='subtitle1' className={classes.centerText}>
+                          We hope you liked your results!
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <div className={classes.buttons}>
+                      <Button variant='contained' color='primary' onClick={handleReset} className={classes.button}>
+                        Reset
+                      </Button>
+                    </div>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    {getStepContent(activeStep)}
+                    <div className={classes.buttons}>
+                      {activeStep !== 0 && (
+                        <Button onClick={handleBack} className={classes.button}>
+                          Back
                         </Button>
-                      </div>
-                    </React.Fragment>
-                  )}
-                </React.Fragment>
+                      )}
+                      <Button variant='contained' color='primary' onClick={handleNext} className={classes.button}>
+                        {activeStep === steps.length - 1 ? 'Done' : 'Next'}
+                      </Button>
+                    </div>
+                  </React.Fragment>
+                )}
+              </React.Fragment>
               {/* </Paper> */}
             </Widget>
           </main>
