@@ -19,8 +19,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Row, Col } from "reactstrap";
-import Widget from "./components/Widget";
+import { Row, Col } from 'reactstrap';
+import Widget from './components/Widget';
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,15 +53,9 @@ export default function InputAdornments() {
   return (
     <Grid container justify='center' className={classes.root}>
       <Grid item xs={12} md={8}>
-        <Col xs={12} lg={6}>
-          <Widget
-            title={
-              <h5>
-                Headings <small className='text-muted'>Default and customized</small>
-              </h5>
-            }>
-            {/* <h4>Default headings</h4>
-            <p>Basic headings for everyday use</p>
+        <Col xs={12} lg={12}>
+          <Widget>
+            <h3>Enviormental Factors</h3>
             <div className='widget-padding-md w-100 h-100 text-left border rounded'>
               <Row>
                 <Col sm={6}>
@@ -103,7 +97,7 @@ export default function InputAdornments() {
             </p>
             <div className='widget-padding-md w-100 h-100 text-left border rounded'>
               <p className='lead'>Light Blue Template is admin dashboard template built with Bootstrap</p>
-            </div> */}
+            </div>
           </Widget>
         </Col>
         {/* <Grid item md={4} xs={8}>

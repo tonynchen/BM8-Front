@@ -21,7 +21,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from './Alert.js';
 import axios from 'axios';
 import Widget from './components/Widget';
+import './styles/theme.scss';
 import s from './Dashboard.module.scss';
+
 // import AddressForm from './AddressForm';
 // import PaymentForm from './PaymentForm';
 // import Review from './Review';
@@ -52,8 +54,19 @@ const theme = createMuiTheme({
       alternativeLabel: {
         color: 'rgba(255,255,255, 0.9)',
         backgroundColor: 'rgba(255,255,255, 0.9)',
-      }
-    }
+      },
+    },
+    MuiStepLabel: {
+      label: {
+        color: 'rgba(255,255,255, 0.9)',
+        '&$active': {
+          color: 'rgba(255,255,255, 0.9)',
+        },
+        '&$completed': {
+          color: 'rgba(255,255,255, 0.9)',
+        },
+      },
+    },
   },
 });
 
@@ -88,8 +101,7 @@ function QontoStepIcon(props) {
     <div
       className={clsx(classes.root, {
         [classes.active]: active,
-      })}
-    >
+      })}>
       {completed ? <Check className={classes.completed} /> : <div className={classes.circle} />}
     </div>
   );
