@@ -1,6 +1,9 @@
 ## Inspiration
 As we are approaching Senior year of college, relocation is a topic that crosses our mind more and more often. We also understand other people who have the same needs since more and more jobs are going virtual. So we wanted to alleviate some of the stress.
 
+## Demo
+https://youtu.be/Rjs7ti70T0A
+
 ## What it does
 We designed an application that recommends 10 places/cities given user preferences.
 
@@ -33,3 +36,11 @@ We used ReactJs and other React packages for the front end. We used Python Flask
 - Make available public usage
 - Improve datasets
 - Refined database management
+
+## Screenshot
+![Home Page](https://i.imgur.com/gzkWBZ9.png)
+![Location Access Request](https://i.imgur.com/gP9OquK.png)
+![Preference](https://i.imgur.com/CoRkMYv.png)
+![Preference cont.](https://i.imgur.com/1G9Fsmk.png)
+![Result](https://i.imgur.com/ki1MuPs.png)
+![Result with Statistics](https://i.imgur.com/RJOUg3c.png)
